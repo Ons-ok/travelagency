@@ -1,6 +1,7 @@
 package com.ditra.travelagency.core;
 
 import com.ditra.travelagency.utils.ErrorResponseModes;
+import com.ditra.travelagency.utils.ValidationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -87,7 +88,8 @@ public class Usercontroller {
             return new ResponseEntity<>(errorResponseModes, HttpStatus.BAD_REQUEST);
         }
          userRepositroy.deleteById(id);
-         return new ResponseEntity<>(HttpStatus.OK);
+         ValidationResponse validationResponse = new ValidationResponse("User successfully deleted ");
+         return new ResponseEntity<>(validationResponse, HttpStatus.OK);
 
 
 
