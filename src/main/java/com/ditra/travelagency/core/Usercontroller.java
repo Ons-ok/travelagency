@@ -57,16 +57,42 @@ public class Usercontroller {
     }
 
     @PutMapping("user/{id}")
-    public void updateUser(@PathVariable int id , @RequestBody User updatedUser ){
+    public ResponseEntity<?> updateUser(@PathVariable int id , @RequestBody User updatedUser ){
         Optional<User> userOptional= userRepositroy.findById(id);
         User databaseUser = userOptional.get();
+
+        if (updatedUser.getName()  == null)
+            return new ResponseEntity<>(new ErrorResponseModes("User name Required"),HttpStatus.BAD_REQUEST);
+        if (updatedUser.getName().length() < 3)
+            return new ResponseEntity<>(new ErrorResponseModes("Wrong User name " ),HttpStatus.BAD_REQUEST);
+        if (updatedUser.getAge()==null)
+            return new ResponseEntity<>(new ErrorResponseModes("User age Required"),HttpStatus.BAD_REQUEST);
+        if (updatedUser.getAge() <= 0)
+            return new ResponseEntity<>(new ErrorResponseModes("Wrong User age " ),HttpStatus.BAD_REQUEST);
+
         databaseUser.setName(updatedUser.getName());
+
         databaseUser.setAge(updatedUser.getAge());
 
         userRepositroy.save(databaseUser);
+        return  new ResponseEntity<>(databaseUser, HttpStatus.OK);
+
+    }
+
+    @DeleteMapping ("user/{id}")
+    public ResponseEntity<?> DeleteUser (@PathVariable int id){
+        Optional<User> userOptional= userRepositroy.findById(id);
+        if (!userOptional.isPresent()) {
+            ErrorResponseModes errorResponseModes = new ErrorResponseModes("Wrong user Id");
+            return new ResponseEntity<>(errorResponseModes, HttpStatus.BAD_REQUEST);
+        }
+         userRepositroy.deleteById(id);
+         return new ResponseEntity<>(HttpStatus.OK);
+
 
 
     }
+
 
 
 
