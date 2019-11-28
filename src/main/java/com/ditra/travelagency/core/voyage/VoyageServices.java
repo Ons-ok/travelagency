@@ -1,5 +1,9 @@
 package com.ditra.travelagency.core.voyage;
 
+import com.ditra.travelagency.core.destination.Destination;
+import com.ditra.travelagency.core.destination.DestinationController;
+import com.ditra.travelagency.core.destination.DestinationRespitory;
+import com.ditra.travelagency.core.destination.DestinationServices;
 import com.ditra.travelagency.core.user.User;
 import com.ditra.travelagency.utils.ErrorResponseModes;
 import com.ditra.travelagency.utils.ValidationResponse;
@@ -15,6 +19,8 @@ import java.util.Optional;
 public class VoyageServices {
     @Autowired
     VoyageRespitory voyageRespitory;
+    @Autowired
+    DestinationRespitory destinationRespitory;
 
     public ResponseEntity<?> creatVoyage (Voyage voyage)
     {
@@ -30,6 +36,13 @@ public class VoyageServices {
             return new ResponseEntity<>(new ErrorResponseModes("Price Required"), HttpStatus.BAD_REQUEST);
         if (voyage.getDate()==null)
             return new ResponseEntity<>(new ErrorResponseModes("Date Required"), HttpStatus.BAD_REQUEST);
+
+        Optional<Destination> destinationOptional= destinationRespitory.findById(voyage.getDestination().getId());
+        if (!destinationOptional.isPresent()){
+            ErrorResponseModes errorResponseModes= new ErrorResponseModes("Wrong destination Id");
+            return new ResponseEntity<>(errorResponseModes, HttpStatus.BAD_REQUEST);
+        }
+
         Voyage databasevoyage=voyageRespitory.save(voyage);
         return new ResponseEntity<>(databasevoyage, HttpStatus.OK);
 

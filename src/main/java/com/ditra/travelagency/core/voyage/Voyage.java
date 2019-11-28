@@ -1,13 +1,11 @@
 package com.ditra.travelagency.core.voyage;
 
+import com.ditra.travelagency.core.destination.Destination;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -25,6 +23,9 @@ public class Voyage {
     private Integer nbPlaces;
     private Double prix;
     private Date date;
+
+    @ManyToOne
+    private Destination destination;
 
 
 

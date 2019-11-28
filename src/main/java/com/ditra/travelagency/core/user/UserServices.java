@@ -31,7 +31,6 @@ public class UserServices {
         return  new ResponseEntity<>(databaseuser, HttpStatus.OK);
     }
 
-
     public List<User> GetAllUser (){
         List<User> userList= userRepositroy.findAll();
         return userList;
