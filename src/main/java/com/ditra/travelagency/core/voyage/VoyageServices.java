@@ -35,12 +35,10 @@ public class VoyageServices {
 
 
     }
-
     public List<Voyage> GetAllvoyages (){
         List<Voyage> voyageList= voyageRespitory.findAll();
         return voyageList;
     }
-
     public ResponseEntity<?>GetVoyage(int id){
         Optional<Voyage> voyageOptional= voyageRespitory.findById(id);
 
