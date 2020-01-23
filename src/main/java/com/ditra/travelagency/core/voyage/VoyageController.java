@@ -32,4 +32,10 @@ public class VoyageController {
 
     }
 
+    @GetMapping("voyage/price/{p}")
+    public List<Voyage> price (@PathVariable double p)
+    {
+        return voyageServices.price(p);
+    }
+
 }

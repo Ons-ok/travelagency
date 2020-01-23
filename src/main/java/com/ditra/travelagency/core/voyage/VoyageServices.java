@@ -125,6 +125,13 @@ public class VoyageServices {
 
     }
 
+    public List<Voyage> price (double p){
+        List<Voyage>voyageList=voyageRespitory.findByPrixLessThanEqualAndNbPlacesNot(p,0) ;
+
+        return voyageList;
+
+    }
+
 
 
 
