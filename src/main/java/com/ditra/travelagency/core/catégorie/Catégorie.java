@@ -1,6 +1,7 @@
 package com.ditra.travelagency.core.catégorie;
 
 import com.ditra.travelagency.core.chambre.Chambre;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,6 +19,7 @@ public class Catégorie {
     private int id;
     private String categorie;
     private String description;
+    @JsonIgnore
     @OneToMany (mappedBy = "catégorie")
     private List<Chambre> chambres;
 

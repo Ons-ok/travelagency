@@ -8,4 +8,5 @@ import java.util.Optional;
 
 public interface ChambreRespitory extends JpaRepository<Chambre, Integer> {
     Optional<Chambre> findByCatégorieAndType(Catégorie catégorie , Type type);
+
 }

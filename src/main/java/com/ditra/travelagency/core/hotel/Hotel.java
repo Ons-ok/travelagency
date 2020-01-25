@@ -25,5 +25,10 @@ public class Hotel {
     private List<Chambre> chambres;
 
 
-
+    public void addChambre(Chambre chambre) {
+        chambres.add(chambre);
+    }
+    public void deleteChambre (int i){
+        chambres.remove(chambres.get(i));
+    }
 }
