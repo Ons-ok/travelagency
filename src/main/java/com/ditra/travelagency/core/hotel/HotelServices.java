@@ -140,8 +140,7 @@ public class HotelServices {
             hotelRespitory.save(databaseHotel);
             ValidationResponse validationResponse = new ValidationResponse("Room successfully deleted ");
             return new ResponseEntity<>(validationResponse, HttpStatus.OK);
-        }
-        else {
+        } else {
             ErrorResponseModes errorResponseModes = new ErrorResponseModes("Wrong room Id");
             return new ResponseEntity<>(errorResponseModes, HttpStatus.BAD_REQUEST);
         }
