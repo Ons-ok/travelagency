@@ -27,13 +27,13 @@ public class HotelController {
         return hotelServices.GetHotel(id);
     }
 
-    @PutMapping ("/hotel/{id}")
+    @PutMapping ("/hotel/{id}/addRoom")
     public ResponseEntity<?> UpdateHotel(@PathVariable int id, @RequestBody Hotel hotel) {
         return hotelServices.Updatehotel(id, hotel);
     }
 
-    @PutMapping ("hotel/{id}/{Cid}")
-    public ResponseEntity<?>DeleteChambre(@PathVariable int id, @PathVariable int Cid){
+    @PutMapping ("hotel/{id}/deleteRoom/{Cid}")
+    public ResponseEntity<?> DeleteChambre(@PathVariable int id, @PathVariable int Cid){
         return hotelServices.DeleteChambre(id, Cid);
     }
 

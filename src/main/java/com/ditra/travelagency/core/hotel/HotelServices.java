@@ -121,25 +121,31 @@ public class HotelServices {
 
         Optional<Hotel> hotelOptional=hotelRespitory.findById(id);
 
-
         if (!hotelOptional.isPresent()) {
             ErrorResponseModes errorResponseModes = new ErrorResponseModes("Wrong hotel Id");
             return new ResponseEntity<>(errorResponseModes, HttpStatus.BAD_REQUEST);
         }
 
         Hotel databaseHotel = hotelOptional.get();
+        boolean exist = false;
+        for (Chambre chambre :databaseHotel.getChambres() ){
+            if (chambre.getId()==Cid)  {
+                databaseHotel.getChambres().remove(chambre);
+                exist = true;
+                break;
+            }
+        }
 
-
-        Optional<Hotel> hotelOptional1=hotelRespitory.findById(hotelOptional.get().getChambres().indexOf(Cid));
-        if (!hotelOptional1.isPresent()) {
-            ErrorResponseModes errorResponseModes = new ErrorResponseModes("Wrong chambre Id");
+        if (exist) {
+            hotelRespitory.save(databaseHotel);
+            ValidationResponse validationResponse = new ValidationResponse("Room successfully deleted ");
+            return new ResponseEntity<>(validationResponse, HttpStatus.OK);
+        }
+        else {
+            ErrorResponseModes errorResponseModes = new ErrorResponseModes("Wrong room Id");
             return new ResponseEntity<>(errorResponseModes, HttpStatus.BAD_REQUEST);
         }
 
-        Hotel databaseHotel1=hotelOptional1.get();
-        databaseHotel1.deleteChambre(Cid);
-        ValidationResponse validationResponse = new ValidationResponse("Chambre successfully deleted ");
-        return new ResponseEntity<>(validationResponse, HttpStatus.OK);
 
 
     }
