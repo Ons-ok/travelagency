@@ -13,7 +13,7 @@ public class Usercontroller {
     UserServices userServices;
     //requete Post pour ajouter un user sous le path Localhost/user
 
-    @PostMapping("/user")
+    @PostMapping("/auth/register")
     public ResponseEntity<?> creatUser (@RequestBody User user)
     {
         return userServices.creatUser(user);

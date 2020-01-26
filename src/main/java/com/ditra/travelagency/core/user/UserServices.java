@@ -4,15 +4,22 @@ package com.ditra.travelagency.core.user;
 import com.ditra.travelagency.utils.ErrorResponseModes;
 import com.ditra.travelagency.utils.ValidationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserServices {
+public class UserServices implements UserDetailsService {
     @Autowired
     UserRepositroy userRepositroy;
 
@@ -26,6 +33,10 @@ public class UserServices {
             return new ResponseEntity<>(new ErrorResponseModes("User age Required"),HttpStatus.BAD_REQUEST);
         if (user.getAge() <= 0)
             return new ResponseEntity<>(new ErrorResponseModes("Wrong User age " ),HttpStatus.BAD_REQUEST);
+
+        String password1= passwordEncoder().encode(user.getPassword());
+        user.setPassword(password1);
+
 
         User databaseuser = userRepositroy.save(user);
         return  new ResponseEntity<>(databaseuser, HttpStatus.OK);
@@ -90,15 +101,28 @@ public class UserServices {
         ValidationResponse validationResponse = new ValidationResponse("User successfully deleted ");
         return new ResponseEntity<>(validationResponse, HttpStatus.OK);
 
-
-
     }
 
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        Optional<User> userOptional=userRepositroy.findByUsername(username);
 
 
+        if (!userOptional.isPresent())
+            return null;
+
+        String password=userOptional.get().getPassword();
 
 
+        return new org.springframework.security.core.userdetails.User(username, password, AuthorityUtils.NO_AUTHORITIES);
 
+    }
+
+    @Bean
+    PasswordEncoder passwordEncoder (){
+        return new BCryptPasswordEncoder();
+    }
 
 }
