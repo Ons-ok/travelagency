@@ -1,12 +1,17 @@
 package com.ditra.travelagency.core.user;
 
 
+import com.ditra.travelagency.core.user.models.SignInRequestModel;
+import com.ditra.travelagency.core.user.models.SignInResponseModel;
 import com.ditra.travelagency.utils.ErrorResponseModes;
+import com.ditra.travelagency.utils.JwtUtils;
 import com.ditra.travelagency.utils.ValidationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,6 +27,10 @@ import java.util.Optional;
 public class UserServices implements UserDetailsService {
     @Autowired
     UserRepositroy userRepositroy;
+    @Autowired
+    AuthenticationManager authenticationManager;
+    @Autowired
+    JwtUtils jwtUtils;
 
     public ResponseEntity<?> creatUser (User user)
     {
@@ -125,4 +134,18 @@ public class UserServices implements UserDetailsService {
         return new BCryptPasswordEncoder();
     }
 
+    public ResponseEntity<?> signin(SignInRequestModel signInRequestModel) {
+
+        String username=signInRequestModel.getUsername();
+        String password=signInRequestModel.getPassword();
+
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(username,password)
+        );
+
+        String token = jwtUtils.genratedtoken(username);
+        return  new ResponseEntity<>(new SignInResponseModel(token), HttpStatus.OK);
+
+
+    }
 }

@@ -1,5 +1,6 @@
 package com.ditra.travelagency.core.user;
 
+import com.ditra.travelagency.core.user.models.SignInRequestModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,8 @@ public class Usercontroller {
         return userServices.creatUser(user);
     }
 
+    @PostMapping("/auth/signin")
+    public ResponseEntity<?> signin(@RequestBody SignInRequestModel signInRequestModel){return userServices.signin(signInRequestModel);}
 
     //retourner tous les données dans la base
     @GetMapping("/users")
